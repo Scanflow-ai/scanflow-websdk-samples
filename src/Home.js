@@ -185,7 +185,7 @@ const Home = () => {
                   textAlign: "center",
                 }}
               >
-                AadharCard Capture
+                Aadhar Card Capture
               </Typography>
             </Box>
             <Box

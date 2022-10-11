@@ -6,7 +6,7 @@ This library is used to support the developers in order to perform the scanning 
 
     To install the Scanflow WebSDK package into your project use the below installation command from your command prompt.
 
-    Installation Command - npm install scanflow_websdk_demo (Latest Version 1.1.19)
+    Installation Command - npm install scanflow_websdk_demo (Latest Version 1.1.21)
 
     Demo Code Repository - https://github.com/Scanflow-ai/scanflow-websdk-samples
 
