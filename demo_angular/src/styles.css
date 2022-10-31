@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "~scanflow_websdk3/src/styles/styles.css";
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.overlay_heading {
+  top: 50%;
+  left: 50%;
+  right: 50%;
+  position: relative;
+  transform: translate(-50%, -50%);
+}

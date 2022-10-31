@@ -1,0 +1,64 @@
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  [ngStyle]="{ display: displayStyle }"
+  id="dialogBox"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header mt-2">
+        <h4 class="modal-title d-inline-block">Card Details</h4>
+        <button
+          type="button"
+          class="btn btn-danger d-inline-block"
+          (click)="closeDialog()"
+        >
+          X
+        </button>
+      </div>
+      <div class="modal-body">
+        <img
+          *ngIf="userData?.image"
+          class="d-block m-auto m-auto"
+          src="data:image/jpeg;base64,{{ userData?.image }}"
+          width="{200}"
+          height="{200}"
+          alt="{userData?.name}"
+        />
+        <div class="row" *ngIf="userData?.name">
+          <div class="col">Name</div>
+          <div class="col">-</div>
+          <div class="col">{{ userData?.name }}</div>
+        </div>
+        <div class="row"  *ngIf="userData?.fatherName">
+          <div class="col">Father Name</div>
+          <div class="col">-</div>
+          <div class="col">{{ userData?.fatherName }}</div>
+        </div>
+        <div class="row"  *ngIf="userData?.uniqueId">
+          <div class="col">ID Number</div>
+          <div class="col">-</div>
+          <div class="col">{{ userData?.uniqueId }}</div>
+        </div>
+        <div class="row"  *ngIf="userData?.dob">
+          <div class="col">DOB</div>
+          <div class="col">-</div>
+          <div class="col">{{ userData?.dob }}</div>
+        </div>
+        <div class="row" *ngIf="userData?.sex">
+          <div class="col">Gender</div>
+          <div class="col">-</div>
+          <div class="col">{{ userData?.sex }}</div>
+        </div>
+        <div class="row" *ngIf ="userData?.address">
+          <div class="col">Address</div>
+          <div class="col">-</div>
+          <div class="col">{{ userData?.address }}</div>
+        </div>
+
+        <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+</div>
