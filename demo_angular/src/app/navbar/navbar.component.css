@@ -1,0 +1,25 @@
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.toolbar {
+  background-color: #1976d2;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.toggle {
+  margin-right: 10px;
+}
+
+.devices {
+  color: white;
+  margin-left: 15px;
+  width: 20px;
+}
+
+.options {
+  border-bottom: none;
+}

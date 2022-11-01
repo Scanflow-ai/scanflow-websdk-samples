@@ -1,0 +1,34 @@
+<mat-toolbar class="toolbar">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col col-md-4">
+        <mat-slide-toggle
+          (change)="changeMode()"
+          [checked]="!selected"
+          class="mr-2 toggle"
+          >{{ selected ? "MANUAL" : "AUTO" }}</mat-slide-toggle
+        >
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Video_camera_icon.svg/2048px-Video_camera_icon.svg.png"
+          height="50"
+          width="50"
+          alt="camera"
+        />
+        <mat-form-field class="ml-2 devices">
+          <mat-select>
+            <mat-option
+              class="options"
+              *ngFor="let device of devices"
+              value="{{ device.deviceId }}"
+              >{{ device.label }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col col-md-4">
+        <h1 class="text-center mt-2">Aadhar Card Capture</h1>
+      </div>
+      <div class="col col-md-4"></div>
+    </div>
+  </div>
+</mat-toolbar>

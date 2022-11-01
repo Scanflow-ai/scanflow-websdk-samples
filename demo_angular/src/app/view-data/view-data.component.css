@@ -1,0 +1,14 @@
+.dataDialog {
+  top: 40%;
+  left: 50%;
+  right: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background-color: white;
+}
+
+.close {
+  float: right;
+  overflow: hidden;
+  border: none;
+}
