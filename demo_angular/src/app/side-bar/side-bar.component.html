@@ -1,1 +1,58 @@
-<p>side-bar works!</p>
+<div class="sidenav" id="preset">
+  <h3 class="d-inline-block">Preset</h3>
+    <button
+      class="btn"
+      style="float: right; overflow: hidden"
+      (click)="closePreset()"
+    >
+      <h3>X</h3>
+    </button>
+  <div>
+    <div class="container">
+      <input
+        type="radio"
+        id="age1"
+        name="cardtype"
+        value="{{ cardsList[0] }}"
+      />
+      <label className="m-1" htmlFor="{{ cardsList[0] }}">
+        <h3>
+          {{ cardsList[0] }}
+        </h3>
+      </label>
+    </div>
+    <div>
+      <input
+        type="radio"
+        id="age1"
+        name="cardtype"
+        value="{{ cardsList[1] }}"
+        class="m-2"
+      />
+      <label className="m-1" htmlFor="{{ cardsList[1] }}">
+        <h3>{{ cardsList[1] }} (Beta)</h3>
+      </label>
+    </div>
+  </div>
+  <hr />
+  <h3>
+    <h3>
+      <a
+        href="https://demo.scanflow.ai/docs/"
+        target="_blank"
+        class="nav-link d-block m-2"
+        style="color: white"
+      >
+        Docs
+      </a>
+      <a
+        href="https://github.com/Scanflow-ai/scanflow-websdk-samples"
+        target="_blank"
+        class="nav-link d-block m-2"
+        style="color: white"
+      >
+        Demo Code
+      </a>
+    </h3>
+  </h3>
+</div>

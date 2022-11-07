@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Modal, Row, Col } from "react-bootstrap";
-import { List, Container, Grid } from "@mui/material";
+import {Container} from "@mui/material";  
 
 export default function SFResultDialog(props) {
   const { open, handleClose, data } = props;
@@ -12,7 +12,7 @@ export default function SFResultDialog(props) {
         show={open}
         onHide={handleClose}
       >
-        <Modal.Header closeButton>Aadhar Card Details</Modal.Header>
+        <Modal.Header closeButton>Card Details</Modal.Header>
         <Modal.Body>
           {data[0]?.image && (
             <img
@@ -62,7 +62,7 @@ export default function SFResultDialog(props) {
             )}
             {data[0]?.uniqueId && (
               <Row>
-                <Col>Aadhar Id</Col>
+                <Col>ID Number</Col>
                 <Col xs={2} className="text-center">
                   -
                 </Col>

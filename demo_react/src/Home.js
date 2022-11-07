@@ -15,9 +15,13 @@ import {
   AppBar,
   Switch,
   FormControlLabel,
+  Button,
 } from "@mui/material";
+import SFCardType from "./SFCardType";
+import SFErrorDisplay from "./SFErrorDisplay";
 
 const licenseKey = environment.LICENSE_KEY;
+const domainName = environment.DOMAIN_NAME;
 const Home = () => {
   const [devices, setDevices] = useState([]);
   const [deviceId, setDeviceId] = React.useState("");
@@ -26,15 +30,23 @@ const Home = () => {
   const [modes, setModes] = useState([]);
   const [mode, setCaptureMode] = useState("");
   const [checked, setChecked] = React.useState(true);
+  const [cardPreset, setCardPreset] = useState("");
+  const [cardsList, setCardsList] = useState([]);
+  const [togglePreset, setTogglePreset] = useState(false);
+  const [error, setErrorResponse] = useState("");
+
   useEffect(() => {
     // Created Package with Test License Key
-    ScanflowSDK.configureSDK(licenseKey)
+    const idDataObj = new ScanflowSDK.IDCapture();
+    const listOfCards = idDataObj.getCardTypes();
+    setCardsList([...listOfCards]);
+    const modes = idDataObj.getcaptureModeData();
+    setModes([...modes]);
+    ScanflowSDK.configureSDK(licenseKey, domainName)
       .then(async (res) => {
-        const idDataObj = new ScanflowSDK.IDCapture();
-        const modes = idDataObj.getcaptureModeData();
-        setModes([...modes]);
         const configuration = {
           captureMode: "auto",
+          cardType: listOfCards[0],
         };
         const rootElement = document.getElementById("camera_view");
         const captureObj = new ScanflowSDK.CaptureView(
@@ -45,44 +57,119 @@ const Home = () => {
         setDevices([...devices]);
         const eventEmitter = idDataObj.addListener();
         eventEmitter.on("getData", (data) => {
-          console.log(data);
           setData([data]);
           handleClickOpen();
         });
       })
       .catch((err) => {
-        console.log(err);
+        if (err?.response?.data.detail) {
+          setErrorResponse(err?.response?.data.detail);
+        } else if (err?.message) {
+          setErrorResponse(err?.message);
+        } else {
+          console.log(err);
+        }
       });
   }, [rerender]);
   const changeDevices = (event) => {
-    const constraints = {
-      deviceId: event.target.value,
-    };
-    const configuration = {
-      licenseKey,
-      captureMode: mode.trim().length > 0 ? "auto" : "manual",
-    };
-    console.log(constraints);
-    const rootElement = document.getElementById("camera_view");
-    new ScanflowSDK.CaptureView(rootElement, configuration, constraints);
+    try {
+      const constraints = {
+        deviceId: event.target.value,
+      };
+      ScanflowSDK.configureSDK(licenseKey, domainName)
+        .then(async (res) => {
+          setModes([...modes]);
+          const configuration = {
+            licenseKey,
+            captureMode: mode.trim().length > 0 ? "auto" : "manual",
+            cardType: cardPreset.trim().length > 0 ? cardPreset : cardsList[0],
+          };
+          const rootElement = document.getElementById("camera_view");
+          new ScanflowSDK.CaptureView(rootElement, configuration, constraints);
+        })
+        .catch((err) => {
+          if (err?.response?.data.detail) {
+            setErrorResponse(err?.response?.data.detail);
+          } else if (err?.message) {
+            setErrorResponse(err?.message);
+          } else {
+            console.log(err);
+          }
+        });
+    } catch (err) {
+      console.log(err);
+    }
   };
   const changeCaptureMode = (event) => {
-    const modeOfCapture = event.target.checked ? modes[0] : modes[1];
-    setCaptureMode(modeOfCapture);
-    setChecked(event.target.checked);
-    const constraints = {
-      deviceId: deviceId,
-    };
-    const configuration = {
-      licenseKey,
-      captureMode: modeOfCapture,
-    };
-    console.log(configuration);
-    const rootElement = document.getElementById("camera_view");
-    new ScanflowSDK.CaptureView(rootElement, configuration, constraints);
+    try {
+      const modeOfCapture = event.target.checked ? modes[0] : modes[1];
+      setCaptureMode(modeOfCapture);
+      setChecked(event.target.checked);
+      const constraints = {
+        deviceId: deviceId,
+      };
+      ScanflowSDK.configureSDK(licenseKey, domainName)
+        .then(async (res) => {
+          setModes([...modes]);
+          const configuration = {
+            licenseKey,
+            captureMode: modeOfCapture,
+            cardType: cardPreset.trim().length > 0 ? cardPreset : cardsList[0],
+          };
+          const rootElement = document.getElementById("camera_view");
+          new ScanflowSDK.CaptureView(rootElement, configuration, constraints);
+        })
+        .catch((err) => {
+          if (err?.response?.data.detail) {
+            setErrorResponse(err?.response?.data.detail);
+          } else if (err?.message) {
+            setErrorResponse(err?.message);
+          } else {
+            console.log(err);
+          }
+        });
+    } catch (err) {
+      console.log(err);
+    }
   };
   const [open, setOpen] = React.useState(false);
-
+  const openPreset = () => {
+    setTogglePreset(!togglePreset);
+    document.getElementById("card_type").style.display = "block";
+  };
+  const setCaptureView = (cardType) => {
+    try {
+      setCardPreset(cardType);
+      const constraints = {
+        deviceId: deviceId,
+      };
+      ScanflowSDK.configureSDK(licenseKey, domainName)
+        .then(async (res) => {
+          const configuration = {
+            licenseKey,
+            captureMode: mode ? mode : "auto",
+            cardType,
+          };
+          const rootElement = document.getElementById("camera_view");
+          new ScanflowSDK.CaptureView(rootElement, configuration, constraints);
+        })
+        .catch((err) => {
+          if (err?.response?.data.detail) {
+            setErrorResponse(err?.response?.data.detail);
+          } else if (err?.message) {
+            setErrorResponse(err?.message);
+          } else {
+            console.log(err);
+          }
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const closePreset = () => {
+    setTogglePreset(!togglePreset);
+    document.getElementById("card_type").style.display = "none";
+  };
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -102,15 +189,29 @@ const Home = () => {
                 alignItems: { xl: "flex-start" },
               }}
             >
+              <Button
+                variant="text"
+                color="inherit"
+                onClick={
+                  !togglePreset ? () => openPreset() : () => closePreset()
+                }
+              >
+                <Typography
+                  variant="h5"
+                  color="white"
+                  sx={{ textAlign: "center" }}
+                >
+                  &#9776;
+                </Typography>
+              </Button>
+
               {modes ? (
                 <>
                   <Typography
                     variant="h6"
                     color="white"
                     sx={{ mt: 1, textAlign: "center" }}
-                  >
-                    Mode
-                  </Typography>
+                  ></Typography>
                   <FormControlLabel
                     value={mode}
                     control={
@@ -127,45 +228,45 @@ const Home = () => {
                   />
                 </>
               ) : null}
-              <img
-                src={
-                  "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Video_camera_icon.svg/2048px-Video_camera_icon.svg.png"
-                }
-                height={50}
-                width={50}
-                alt={"camera"}
-              />
-              {devices ? (
-                <FormControl
-                  sx={{
-                    ml: 1,
-                    width: "fit-content",
-                    textAlign: "center",
-                    height: "fit-content",
-                    border: "none",
-                  }}
-                >
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Select Camera Type"
-                    onChange={(event) => changeDevices(event)}
-                    value={deviceId}
-                    onClick={() => setRerender(true)}
-                    sx={{ textAlign: "center" }}
+              <Container maxWidth="md">
+                <img
+                  src={
+                    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Video_camera_icon.svg/2048px-Video_camera_icon.svg.png"
+                  }
+                  height={50}
+                  width={50}
+                  alt={"camera"}
+                  className="d-inline-block mt-2"
+                />
+                {devices ? (
+                  <FormControl
+                    sx={{
+                      textAlign: "center",
+                      border: "none",
+                    }}
                   >
-                    {devices.map((e, index) => (
-                      <MenuItem value={e.deviceId} key={index}>
-                        {e.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              ) : null}
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Select Camera Type"
+                      onChange={(event) => changeDevices(event)}
+                      value={deviceId}
+                      onClick={() => setRerender(true)}
+                      sx={{ textAlign: "center" }}
+                    >
+                      {devices.map((e, index) => (
+                        <MenuItem value={e.deviceId} key={index}>
+                          {e.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                ) : null}
+              </Container>
             </Box>
 
             <Box
-              sx={{ flexGrow: 5, display: { xs: "none", md: "flex" } }}
+              sx={{ flexGrow: 3, display: { xs: "none", md: "flex" } }}
             ></Box>
             <Box
               className="d-block m-auto m-auto"
@@ -184,6 +285,7 @@ const Home = () => {
                   textDecoration: "none",
                   textAlign: "center",
                 }}
+                id="cardHeading"
               >
                 Aadhar Card Capture
               </Typography>
@@ -191,30 +293,15 @@ const Home = () => {
             <Box
               sx={{ flexGrow: 5, display: { xs: "none", md: "flex" } }}
             ></Box>
-
-            <Box sx={{ flexGrow: 0, mr: 4 }}>
-              <Typography variant="h6" color="white">
-                <a
-                  href={"/docs"}
-                  target="_blank"
-                  className="nav-link d-inline mr-2"
-                >
-                  Docs
-                </a>
-                <a
-                  href={
-                    "https://github.com/Scanflow-ai/scanflow-websdk-samples"
-                  }
-                  target="_blank"
-                  className="nav-link d-inline m-2"
-                >
-                  Demo Code
-                </a>
-              </Typography>
-            </Box>
           </Toolbar>
         </AppBar>
       </Box>
+      <SFCardType
+        cardsList={cardsList}
+        closePreset={closePreset}
+        openPreset={openPreset}
+        setCaptureView={setCaptureView}
+      />
       <SFIDCapture />;
       <SFSideBar
         handleClose={handleClose}

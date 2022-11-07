@@ -26,7 +26,8 @@
     "bootstrap": "^5.2.2",
     "react-bootstrap": "^2.5.0",
     "rxjs": "~7.5.0",
-    "scanflow_websdk_demo": "^1.1.30",
+    "scanflow_websdk": "^1.1.10",
+    "scanflow_websdk_demo": "1.1.30",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },

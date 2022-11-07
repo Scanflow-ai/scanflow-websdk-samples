@@ -21,7 +21,7 @@ const App = () => {
             render={() => (
               <Navigate
                 to={{
-                  pathname: "https://demo.scanflow.ai/docs/",
+                  pathname: "/index.html",
                 }}
               />
             )}

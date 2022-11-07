@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as ScanflowSDK from 'scanflow_websdk_demo';
+import * as ScanflowSDK from 'scanflow_websdk';
 import { environment } from 'src/environments/environment';
 import { PostServiceService } from '../post-service.service';
 

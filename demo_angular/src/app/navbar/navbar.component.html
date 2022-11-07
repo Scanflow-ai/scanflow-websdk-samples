@@ -1,7 +1,19 @@
 <mat-toolbar class="toolbar">
   <div class="container-fluid">
     <div class="row">
-      <div class="col col-md-4">
+      <div class="col col-md-4 d-inline-block">
+        <h6
+          style="
+            font-size: 30px;
+            cursor: pointer;
+            color: white;
+            display: inline-block;
+            margin-right: 10px;
+          "
+          (click)="openNav()"
+        >
+          &#9776;
+        </h6>
         <mat-slide-toggle
           (change)="changeMode()"
           [checked]="!selected"
